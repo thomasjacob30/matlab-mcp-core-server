@@ -1,221 +1,200 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ERL 332 – Signal Processing Lab</title>
-  <style>
-    /* ── Reset & Base ─────────────────────────────────────────── */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ERL 332 - Signal Processing Lab</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
 
-    body {
-      font-family: 'Segoe UI', Arial, sans-serif;
-      background: #f0f2f5;
-      color: #1a1a2e;
-      line-height: 1.7;
-    }
+  body {
+    font-family: Arial, sans-serif;
+    background: #eef1f7;
+    color: #111;
+  }
 
-    /* ── Header ──────────────────────────────────────────────── */
-    header {
-      background: linear-gradient(135deg, #0f3460 0%, #16213e 100%);
-      color: #fff;
-      text-align: center;
-      padding: 40px 20px 30px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-    }
-    header h1 { font-size: 1.9rem; letter-spacing: 1px; }
-    header p  { font-size: 1rem; opacity: 0.80; margin-top: 6px; }
-    header .badge {
-      display: inline-block;
-      background: #e94560;
-      color: #fff;
-      font-size: 0.78rem;
-      padding: 3px 12px;
-      border-radius: 20px;
-      margin-top: 10px;
-      letter-spacing: 0.5px;
-    }
+  /* ── HEADER ── */
+  header {
+    background: #0d2b55;
+    color: white;
+    text-align: center;
+    padding: 36px 20px 28px;
+  }
+  header h1 { font-size: 1.7rem; margin-bottom: 6px; }
+  header p  { font-size: 0.95rem; opacity: 0.8; }
+  .tag {
+    display: inline-block;
+    background: #c0392b;
+    color: white;
+    font-size: 0.78rem;
+    padding: 3px 14px;
+    border-radius: 20px;
+    margin-top: 10px;
+  }
 
-    /* ── Table of Contents ───────────────────────────────────── */
-    .toc {
-      max-width: 860px;
-      margin: 30px auto 0;
-      background: #fff;
-      border-radius: 10px;
-      padding: 24px 30px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-    }
-    .toc h2 { font-size: 1.05rem; color: #0f3460; margin-bottom: 12px; }
-    .toc ol  { padding-left: 20px; }
-    .toc li  { margin: 5px 0; }
-    .toc a   { color: #e94560; text-decoration: none; font-weight: 500; }
-    .toc a:hover { text-decoration: underline; }
+  /* ── TABLE OF CONTENTS ── */
+  .toc {
+    max-width: 900px;
+    margin: 28px auto 0;
+    background: white;
+    border-radius: 10px;
+    padding: 22px 28px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  }
+  .toc h2 { color: #0d2b55; font-size: 1rem; margin-bottom: 12px; }
+  .toc ol  { padding-left: 22px; }
+  .toc li  { margin: 6px 0; }
+  .toc a   { color: #c0392b; text-decoration: none; font-weight: 600; }
+  .toc a:hover { text-decoration: underline; }
 
-    /* ── Experiment Card ─────────────────────────────────────── */
-    .container { max-width: 860px; margin: 30px auto 60px; padding: 0 16px; }
+  /* ── MAIN CONTAINER ── */
+  .container { max-width: 900px; margin: 28px auto 60px; padding: 0 14px; }
 
-    .exp-card {
-      background: #fff;
-      border-radius: 12px;
-      margin-bottom: 36px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.09);
-      overflow: hidden;
-    }
+  /* ── EXPERIMENT CARD ── */
+  .card {
+    background: white;
+    border-radius: 12px;
+    margin-bottom: 34px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.09);
+    overflow: hidden;
+  }
 
-    .exp-header {
-      background: linear-gradient(90deg, #0f3460, #1a4a8a);
-      color: #fff;
-      padding: 16px 24px;
-      display: flex;
-      align-items: center;
-      gap: 14px;
-    }
-    .exp-number {
-      background: #e94560;
-      color: #fff;
-      font-weight: 700;
-      font-size: 0.85rem;
-      padding: 4px 12px;
-      border-radius: 20px;
-      white-space: nowrap;
-    }
-    .exp-title { font-size: 1.05rem; font-weight: 600; }
+  .card-header {
+    background: #0d2b55;
+    color: white;
+    padding: 14px 22px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .exp-num {
+    background: #c0392b;
+    color: white;
+    font-size: 0.82rem;
+    font-weight: bold;
+    padding: 4px 13px;
+    border-radius: 20px;
+    white-space: nowrap;
+  }
+  .card-header span { font-size: 1rem; font-weight: 600; }
 
-    .exp-body { padding: 22px 24px; }
+  .card-body { padding: 20px 22px; }
 
-    /* ── Aim box ────────────────────────────────────────────── */
-    .aim-box {
-      background: #fff8e1;
-      border-left: 4px solid #f9a825;
-      border-radius: 6px;
-      padding: 14px 18px;
-      margin-bottom: 20px;
-    }
-    .aim-box .aim-label {
-      font-size: 0.72rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      color: #f57f17;
-      margin-bottom: 6px;
-    }
-    .aim-box p {
-      font-size: 0.97rem;
-      color: #4a3800;
-      font-weight: 500;
-    }
+  /* ── AIM BOX ── */
+  .aim {
+    background: #fffde7;
+    border-left: 4px solid #f9a825;
+    border-radius: 6px;
+    padding: 14px 16px;
+    margin-bottom: 18px;
+  }
+  .aim-label {
+    font-size: 0.72rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #e65100;
+    margin-bottom: 6px;
+  }
+  .aim p { font-size: 0.95rem; color: #3e2700; line-height: 1.65; }
+  .aim p b { color: #bf360c; }
 
-    /* ── Code block ─────────────────────────────────────────── */
-    .code-wrapper {
-      position: relative;
-      border-radius: 8px;
-      overflow: hidden;
-      border: 1px solid #dde3ee;
-    }
-    .code-toolbar {
-      background: #1e2a3a;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 7px 14px;
-    }
-    .code-lang {
-      color: #7ec8e3;
-      font-size: 0.75rem;
-      font-family: monospace;
-      letter-spacing: 0.5px;
-    }
-    .copy-btn {
-      background: #e94560;
-      color: #fff;
-      border: none;
-      border-radius: 5px;
-      padding: 4px 13px;
-      font-size: 0.75rem;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-    .copy-btn:hover  { background: #c0392b; }
-    .copy-btn:active { background: #27ae60; }
+  /* ── CODE BLOCK ── */
+  .code-wrap {
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid #cdd5e0;
+  }
+  .code-bar {
+    background: #1a2636;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 7px 14px;
+  }
+  .code-lang { color: #7ec8e3; font-size: 0.75rem; font-family: monospace; }
+  .copy-btn {
+    background: #c0392b;
+    color: white;
+    border: none;
+    padding: 4px 14px;
+    border-radius: 5px;
+    font-size: 0.75rem;
+    cursor: pointer;
+  }
+  .copy-btn:hover { background: #922b21; }
 
-    pre {
-      background: #0d1b2a;
-      color: #cdd6f4;
-      font-family: 'Consolas', 'Courier New', monospace;
-      font-size: 0.84rem;
-      line-height: 1.6;
-      padding: 18px 20px;
-      overflow-x: auto;
-      margin: 0;
-      white-space: pre;
-    }
+  pre {
+    background: #0d1b2a;
+    color: #d4e0f0;
+    font-family: Consolas, "Courier New", monospace;
+    font-size: 0.83rem;
+    line-height: 1.6;
+    padding: 18px 20px;
+    overflow-x: auto;
+    margin: 0;
+    white-space: pre;
+  }
 
-    /* Minimal MATLAB syntax colouring (span-based) */
-    .kw  { color: #89b4fa; font-weight: bold; }   /* keywords */
-    .cm  { color: #6c7086; font-style: italic; }   /* comments */
-    .st  { color: #a6e3a1; }                        /* strings  */
-    .nm  { color: #fab387; }                        /* numbers  */
-    .fn  { color: #cba6f7; }                        /* functions */
-
-    /* ── Footer ─────────────────────────────────────────────── */
-    footer {
-      text-align: center;
-      font-size: 0.82rem;
-      color: #888;
-      padding: 20px;
-    }
-  </style>
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    font-size: 0.82rem;
+    color: #888;
+    padding: 20px;
+  }
+</style>
 </head>
 <body>
 
-<!-- ═══════════════════════════════════════════════════════════════
-     HEADER
-════════════════════════════════════════════════════════════════ -->
+<!-- HEADER -->
 <header>
-  <h1>ERL 332 – Signal Processing Lab</h1>
-  <p>St. Joseph's College of Engineering &amp; Technology</p>
-  <span class="badge">Part B &nbsp;|&nbsp; MATLAB Experiments</span>
+  <h1>ERL 332 &ndash; Signal Processing Lab</h1>
+  <p>St. Joseph&apos;s College of Engineering &amp; Technology</p>
+  <div class="tag">Part B &nbsp;|&nbsp; MATLAB Experiments</div>
 </header>
 
-<!-- ═══════════════════════════════════════════════════════════════
-     TABLE OF CONTENTS
-════════════════════════════════════════════════════════════════ -->
+<!-- TABLE OF CONTENTS -->
 <div class="toc">
-  <h2>📋 Table of Contents</h2>
+  <h2>&#128203; Table of Contents</h2>
   <ol>
-    <li><a href="#exp1">Experiment 1 – Generation of Waveforms</a></li>
-    <li><a href="#exp2">Experiment 2 – Time &amp; Frequency Response of LTI Systems</a></li>
-    <li><a href="#exp3">Experiment 3 – Linear &amp; Circular Convolution</a></li>
-    <li><a href="#exp4">Experiment 4 – DFT and IDFT of a Sequence</a></li>
-    <li><a href="#exp5">Experiment 5 – Linear Convolution using DFT</a></li>
-    <li><a href="#exp6">Experiment 6 – FFT and IFFT</a></li>
-    <li><a href="#exp7">Experiment 7 – FIR and IIR Filter Design</a></li>
+    <li><a href="#e1">Experiment 1 &ndash; Generation of Waveforms</a></li>
+    <li><a href="#e2">Experiment 2 &ndash; Time &amp; Frequency Response of LTI Systems</a></li>
+    <li><a href="#e3">Experiment 3 &ndash; Linear &amp; Circular Convolution</a></li>
+    <li><a href="#e4">Experiment 4 &ndash; DFT and IDFT of a Sequence</a></li>
+    <li><a href="#e5">Experiment 5 &ndash; Linear Convolution using DFT</a></li>
+    <li><a href="#e6">Experiment 6 &ndash; FFT and IFFT</a></li>
+    <li><a href="#e7">Experiment 7 &ndash; FIR and IIR Filter Design</a></li>
   </ol>
 </div>
 
 <div class="container">
 
-<!-- ═══════════════════════════════════════════════════════════════
-     EXPERIMENT 1
-════════════════════════════════════════════════════════════════ -->
-<div class="exp-card" id="exp1">
-  <div class="exp-header">
-    <span class="exp-number">Exp 1</span>
-    <span class="exp-title">Generation of Waveforms (Continuous and Discrete)</span>
+<!-- ╔══════════════════════════════════════════════════════╗
+     ║  EXPERIMENT 1                                        ║
+     ╚══════════════════════════════════════════════════════╝ -->
+<div class="card" id="e1">
+  <div class="card-header">
+    <span class="exp-num">Exp 1</span>
+    <span>Generation of Waveforms (Continuous and Discrete)</span>
   </div>
-  <div class="exp-body">
-    <div class="aim-box">
-      <div class="aim-label">Aim (Question)</div>
-      <p>How do you generate and plot the following waveforms in both continuous and discrete form using MATLAB?
-         <br>1. Unit Impulse Signal &nbsp; 2. Unit Step Signal &nbsp; 3. Unit Ramp Signal &nbsp;
-         4. Sine Signal &nbsp; 5. Cosine Signal</p>
+  <div class="card-body">
+    <div class="aim">
+      <div class="aim-label">&#127919; Aim &ndash; Question</div>
+      <p>How do you generate and plot the following waveforms in both
+         <b>continuous</b> and <b>discrete</b> form using MATLAB?<br>
+         1. Unit Impulse Signal &nbsp;
+         2. Unit Step Signal &nbsp;
+         3. Unit Ramp Signal &nbsp;
+         4. Sine Signal &nbsp;
+         5. Cosine Signal</p>
     </div>
-    <div class="code-wrapper">
-      <div class="code-toolbar">
-        <span class="code-lang">MATLAB – exp1_waveforms.m</span>
+    <div class="code-wrap">
+      <div class="code-bar">
+        <span class="code-lang">MATLAB &mdash; exp1_waveforms.m</span>
         <button class="copy-btn" onclick="copyCode(this)">Copy</button>
       </div>
-<pre id="code1">% EXPERIMENT 1 - Generation of Waveforms (Continuous and Discrete)
+<pre>% EXPERIMENT 1 - Generation of Waveforms (Continuous and Discrete)
 % Aim: Plot Unit Impulse, Unit Step, Unit Ramp, Sine, Cosine signals
 
 clc;
@@ -228,18 +207,18 @@ n  = -10:10;
 % ---- Continuous-time axis ----
 t  = -2:0.001:2;
 tc = 0:0.001:1;
-f  = 5;           % frequency for sine/cosine (Hz)
+f  = 5;           % frequency in Hz
 
 % =========================================================
 %  DISCRETE SIGNALS
 % =========================================================
-impulse_d  = double(n == 0);
-step_d     = double(n >= 0);
-ramp_d     = n .* double(n >= 0);
-sine_d     = sin(2*pi*0.1*n);    % normalized digital freq 0.1
-cosine_d   = cos(2*pi*0.1*n);
+impulse_d = double(n == 0);
+step_d    = double(n >= 0);
+ramp_d    = n .* double(n >= 0);
+sine_d    = sin(2*pi*0.1*n);
+cosine_d  = cos(2*pi*0.1*n);
 
-figure('Name','Experiment 1 - Discrete Time Signals','NumberTitle','off');
+figure('Name','Exp1 - Discrete Time Signals','NumberTitle','off');
 
 subplot(3,2,1);
 stem(n, impulse_d, 'filled', 'LineWidth', 1.5);
@@ -256,8 +235,7 @@ axis([-10 10 -0.2 1.3]); grid on;
 subplot(3,2,3);
 stem(n, ramp_d, 'filled', 'LineWidth', 1.5);
 title('3. Unit Ramp r[n]');
-xlabel('n'); ylabel('Amplitude');
-grid on;
+xlabel('n'); ylabel('Amplitude'); grid on;
 
 subplot(3,2,4);
 stem(n, sine_d, 'filled', 'LineWidth', 1.5);
@@ -271,18 +249,18 @@ title('5. Cosine Signal cos(0.2\pin)');
 xlabel('n'); ylabel('Amplitude');
 ylim([-1.3 1.3]); grid on;
 
-sgtitle('Discrete Time Signals', 'FontWeight', 'bold', 'FontSize', 12);
+sgtitle('Discrete Time Signals','FontWeight','bold','FontSize',12);
 
 % =========================================================
 %  CONTINUOUS SIGNALS
 % =========================================================
-impulse_c = double(abs(t) &lt; 0.01);     % approximated impulse
-step_c    = double(t >= 0);
-ramp_c    = t .* double(t >= 0);
+impulse_c = double(abs(t) &lt; 0.01);
+step_c    = double(t &gt;= 0);
+ramp_c    = t .* double(t &gt;= 0);
 sine_c    = sin(2*pi*f*tc);
 cosine_c  = cos(2*pi*f*tc);
 
-figure('Name','Experiment 1 - Continuous Time Signals','NumberTitle','off');
+figure('Name','Exp1 - Continuous Time Signals','NumberTitle','off');
 
 subplot(3,2,1);
 plot(t, impulse_c, 'LineWidth', 2);
@@ -299,8 +277,7 @@ ylim([-0.2 1.5]); grid on;
 subplot(3,2,3);
 plot(t, ramp_c, 'LineWidth', 1.5);
 title('3. Unit Ramp r(t)');
-xlabel('t'); ylabel('Amplitude');
-grid on;
+xlabel('t'); ylabel('Amplitude'); grid on;
 
 subplot(3,2,4);
 plot(tc, sine_c, 'LineWidth', 1.5);
@@ -314,33 +291,37 @@ title('5. Cosine Signal cos(2\pift)');
 xlabel('t (s)'); ylabel('Amplitude');
 ylim([-1.3 1.3]); grid on;
 
-sgtitle('Continuous Time Signals', 'FontWeight', 'bold', 'FontSize', 12);</pre>
+sgtitle('Continuous Time Signals','FontWeight','bold','FontSize',12);</pre>
     </div>
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════════════════════════════
-     EXPERIMENT 2
-════════════════════════════════════════════════════════════════ -->
-<div class="exp-card" id="exp2">
-  <div class="exp-header">
-    <span class="exp-number">Exp 2</span>
-    <span class="exp-title">Time and Frequency Response of LTI Systems</span>
+<!-- ╔══════════════════════════════════════════════════════╗
+     ║  EXPERIMENT 2                                        ║
+     ╚══════════════════════════════════════════════════════╝ -->
+<div class="card" id="e2">
+  <div class="card-header">
+    <span class="exp-num">Exp 2</span>
+    <span>Time and Frequency Response of LTI Systems</span>
   </div>
-  <div class="exp-body">
-    <div class="aim-box">
-      <div class="aim-label">Aim (Question)</div>
-      <p>How do you obtain and plot the time domain response (impulse and step) and frequency domain response
-         (magnitude and phase) of the following LTI systems using MATLAB?
-         <br><b>First Order:</b> a) y(n) = x(n) − x(n−1) &nbsp;&nbsp; b) y(n) = 0.2x(n) + 0.2x(n−1) + 0.6y(n−1)
-         <br><b>Second Order:</b> a) y(n) = 0.5x(n) + x(n−1) + 0.5x(n−2) &nbsp;&nbsp; b) y(n) = x(n) + 0.9x(n−2) − 0.4y(n−2)</p>
+  <div class="card-body">
+    <div class="aim">
+      <div class="aim-label">&#127919; Aim &ndash; Question</div>
+      <p>How do you obtain and plot the <b>time domain</b> (impulse response, step response) and
+         <b>frequency domain</b> (magnitude response, phase response) of the following LTI systems using MATLAB?<br><br>
+         <b>First Order:</b><br>
+         &nbsp;&nbsp;a) y(n) = x(n) &minus; x(n&minus;1)<br>
+         &nbsp;&nbsp;b) y(n) = 0.2x(n) + 0.2x(n&minus;1) + 0.6y(n&minus;1)<br><br>
+         <b>Second Order:</b><br>
+         &nbsp;&nbsp;a) y(n) = 0.5x(n) + x(n&minus;1) + 0.5x(n&minus;2)<br>
+         &nbsp;&nbsp;b) y(n) = x(n) + 0.9x(n&minus;2) &minus; 0.4y(n&minus;2)</p>
     </div>
-    <div class="code-wrapper">
-      <div class="code-toolbar">
-        <span class="code-lang">MATLAB – exp2_lti_response.m</span>
+    <div class="code-wrap">
+      <div class="code-bar">
+        <span class="code-lang">MATLAB &mdash; exp2_lti_response.m</span>
         <button class="copy-btn" onclick="copyCode(this)">Copy</button>
       </div>
-<pre id="code2">% EXPERIMENT 2 - Time and Frequency Response of LTI Systems
+<pre>% EXPERIMENT 2 - Time and Frequency Response of LTI Systems
 %
 % First Order:
 %   1a) y(n) = x(n) - x(n-1)
@@ -364,10 +345,10 @@ stp = ones(1,N);           % unit step
 % =========================================================
 %  SYSTEM COEFFICIENTS   b = numerator,  a = denominator
 % =========================================================
-b1a = [1, -1];        a1a = [1];          % 1a
-b1b = [0.2, 0.2];     a1b = [1, -0.6];    % 1b
-b2a = [0.5, 1, 0.5];  a2a = [1];          % 2a
-b2b = [1, 0, 0.9];    a2b = [1, 0, 0.4];  % 2b
+b1a = [1, -1];        a1a = [1];
+b1b = [0.2, 0.2];     a1b = [1, -0.6];
+b2a = [0.5, 1, 0.5];  a2a = [1];
+b2b = [1, 0, 0.9];    a2b = [1, 0, 0.4];
 
 % =========================================================
 %  FIGURE 1 : First Order System 1a
@@ -385,13 +366,16 @@ title('Step Response'); xlabel('n'); ylabel('y[n]'); grid on;
 
 subplot(2,2,3); plot(w/pi, 20*log10(abs(H)+eps),'LineWidth',1.5);
 title('Magnitude Response');
-xlabel('Normalized Freq (\times\pi rad/sample)'); ylabel('Magnitude (dB)'); grid on;
+xlabel('Normalized Freq (\times\pi rad/sample)');
+ylabel('Magnitude (dB)'); grid on;
 
 subplot(2,2,4); plot(w/pi, angle(H)*180/pi,'LineWidth',1.5);
 title('Phase Response');
-xlabel('Normalized Freq (\times\pi rad/sample)'); ylabel('Phase (degrees)'); grid on;
+xlabel('Normalized Freq (\times\pi rad/sample)');
+ylabel('Phase (degrees)'); grid on;
 
-sgtitle('First Order System 1a :  y(n) = x(n) - x(n-1)','FontWeight','bold','FontSize',10);
+sgtitle('First Order System 1a : y(n) = x(n) - x(n-1)',...
+        'FontWeight','bold','FontSize',10);
 
 % =========================================================
 %  FIGURE 2 : First Order System 1b
@@ -409,13 +393,16 @@ title('Step Response'); xlabel('n'); ylabel('y[n]'); grid on;
 
 subplot(2,2,3); plot(w/pi, 20*log10(abs(H)+eps),'LineWidth',1.5);
 title('Magnitude Response');
-xlabel('Normalized Freq (\times\pi rad/sample)'); ylabel('Magnitude (dB)'); grid on;
+xlabel('Normalized Freq (\times\pi rad/sample)');
+ylabel('Magnitude (dB)'); grid on;
 
 subplot(2,2,4); plot(w/pi, angle(H)*180/pi,'LineWidth',1.5);
 title('Phase Response');
-xlabel('Normalized Freq (\times\pi rad/sample)'); ylabel('Phase (degrees)'); grid on;
+xlabel('Normalized Freq (\times\pi rad/sample)');
+ylabel('Phase (degrees)'); grid on;
 
-sgtitle('First Order System 1b :  y(n)=0.2x(n)+0.2x(n-1)+0.6y(n-1)','FontWeight','bold','FontSize',10);
+sgtitle('First Order System 1b : y(n)=0.2x(n)+0.2x(n-1)+0.6y(n-1)',...
+        'FontWeight','bold','FontSize',10);
 
 % =========================================================
 %  FIGURE 3 : Second Order System 2a
@@ -433,13 +420,16 @@ title('Step Response'); xlabel('n'); ylabel('y[n]'); grid on;
 
 subplot(2,2,3); plot(w/pi, 20*log10(abs(H)+eps),'LineWidth',1.5);
 title('Magnitude Response');
-xlabel('Normalized Freq (\times\pi rad/sample)'); ylabel('Magnitude (dB)'); grid on;
+xlabel('Normalized Freq (\times\pi rad/sample)');
+ylabel('Magnitude (dB)'); grid on;
 
 subplot(2,2,4); plot(w/pi, angle(H)*180/pi,'LineWidth',1.5);
 title('Phase Response');
-xlabel('Normalized Freq (\times\pi rad/sample)'); ylabel('Phase (degrees)'); grid on;
+xlabel('Normalized Freq (\times\pi rad/sample)');
+ylabel('Phase (degrees)'); grid on;
 
-sgtitle('Second Order System 2a :  y(n)=0.5x(n)+x(n-1)+0.5x(n-2)','FontWeight','bold','FontSize',10);
+sgtitle('Second Order System 2a : y(n)=0.5x(n)+x(n-1)+0.5x(n-2)',...
+        'FontWeight','bold','FontSize',10);
 
 % =========================================================
 %  FIGURE 4 : Second Order System 2b
@@ -457,43 +447,42 @@ title('Step Response'); xlabel('n'); ylabel('y[n]'); grid on;
 
 subplot(2,2,3); plot(w/pi, 20*log10(abs(H)+eps),'LineWidth',1.5);
 title('Magnitude Response');
-xlabel('Normalized Freq (\times\pi rad/sample)'); ylabel('Magnitude (dB)'); grid on;
+xlabel('Normalized Freq (\times\pi rad/sample)');
+ylabel('Magnitude (dB)'); grid on;
 
 subplot(2,2,4); plot(w/pi, angle(H)*180/pi,'LineWidth',1.5);
 title('Phase Response');
-xlabel('Normalized Freq (\times\pi rad/sample)'); ylabel('Phase (degrees)'); grid on;
+xlabel('Normalized Freq (\times\pi rad/sample)');
+ylabel('Phase (degrees)'); grid on;
 
-sgtitle('Second Order System 2b :  y(n)=x(n)+0.9x(n-2)-0.4y(n-2)','FontWeight','bold','FontSize',10);</pre>
+sgtitle('Second Order System 2b : y(n)=x(n)+0.9x(n-2)-0.4y(n-2)',...
+        'FontWeight','bold','FontSize',10);</pre>
     </div>
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════════════════════════════
-     EXPERIMENT 3
-════════════════════════════════════════════════════════════════ -->
-<div class="exp-card" id="exp3">
-  <div class="exp-header">
-    <span class="exp-number">Exp 3</span>
-    <span class="exp-title">Linear Convolution &amp; Circular Convolution</span>
+<!-- ╔══════════════════════════════════════════════════════╗
+     ║  EXPERIMENT 3                                        ║
+     ╚══════════════════════════════════════════════════════╝ -->
+<div class="card" id="e3">
+  <div class="card-header">
+    <span class="exp-num">Exp 3</span>
+    <span>Linear Convolution &amp; Circular Convolution</span>
   </div>
-  <div class="exp-body">
-    <div class="aim-box">
-      <div class="aim-label">Aim (Question)</div>
-      <p>How do you perform and verify the following signal operations using MATLAB?
-         <br>1. Linear Convolution of two sequences
-         <br>2. Circular Convolution of two sequences
-         <br>3. Linear Convolution using Circular Convolution (via zero-padding)</p>
+  <div class="card-body">
+    <div class="aim">
+      <div class="aim-label">&#127919; Aim &ndash; Question</div>
+      <p>How do you perform and verify the following signal operations using MATLAB?<br>
+         1. <b>Linear Convolution</b> of two sequences<br>
+         2. <b>Circular Convolution</b> of two sequences<br>
+         3. <b>Linear Convolution using Circular Convolution</b> (via zero-padding to length L = M+N&minus;1)</p>
     </div>
-    <div class="code-wrapper">
-      <div class="code-toolbar">
-        <span class="code-lang">MATLAB – exp3_convolution.m</span>
+    <div class="code-wrap">
+      <div class="code-bar">
+        <span class="code-lang">MATLAB &mdash; exp3_convolution.m</span>
         <button class="copy-btn" onclick="copyCode(this)">Copy</button>
       </div>
-<pre id="code3">% EXPERIMENT 3 - Linear Convolution & Circular Convolution
-%
-% 1. Linear Convolution
-% 2. Circular Convolution
-% 3. Linear Convolution using Circular Convolution
+<pre>% EXPERIMENT 3 - Linear Convolution and Circular Convolution
 
 clc;
 clear;
@@ -507,35 +496,34 @@ fprintf('Input x[n] : ');  disp(x);
 fprintf('Input h[n] : ');  disp(h);
 
 % =========================================================
-%  1. LINEAR CONVOLUTION  (length = M + N - 1)
+%  1. LINEAR CONVOLUTION  (output length = M + N - 1)
 % =========================================================
 y_linear = conv(x, h);
-fprintf('\nLinear Convolution y[n]:\n');
+fprintf('\n1. Linear Convolution y[n]:\n');
 disp(y_linear);
 
 % =========================================================
-%  2. CIRCULAR CONVOLUTION
-%     Both sequences must be same length; zero-pad the shorter one
+%  2. CIRCULAR CONVOLUTION (zero-pad to equal length N)
 % =========================================================
 N_circ = max(length(x), length(h));
-x_c    = [x, zeros(1, N_circ - length(x))];
-h_c    = [h, zeros(1, N_circ - length(h))];
+x_c = [x, zeros(1, N_circ - length(x))];
+h_c = [h, zeros(1, N_circ - length(h))];
 y_circ = cconv(x_c, h_c, N_circ);
-fprintf('\nCircular Convolution y[n]  (N = %d):\n', N_circ);
+fprintf('\n2. Circular Convolution y[n]  (N = %d):\n', N_circ);
 disp(y_circ);
 
 % =========================================================
 %  3. LINEAR CONVOLUTION USING CIRCULAR CONVOLUTION
-%     Zero-pad both sequences to length L = M + N - 1
+%     Zero-pad both sequences to L = M + N - 1
 % =========================================================
-L      = length(x) + length(h) - 1;
-x_pad  = [x, zeros(1, L - length(x))];
-h_pad  = [h, zeros(1, L - length(h))];
-y_lcc  = cconv(x_pad, h_pad, L);
-fprintf('\nLinear via Circular Convolution y[n]  (L = %d):\n', L);
+L     = length(x) + length(h) - 1;
+x_pad = [x, zeros(1, L - length(x))];
+h_pad = [h, zeros(1, L - length(h))];
+y_lcc = cconv(x_pad, h_pad, L);
+fprintf('\n3. Linear via Circular Convolution y[n]  (L = %d):\n', L);
 disp(y_lcc);
 
-fprintf('\nVerification (Linear == Linear via Circular): %d\n', ...
+fprintf('\nVerification (Linear == Linear via Circular): %d\n',...
         max(abs(y_linear - y_lcc)) &lt; 1e-9);
 
 % =========================================================
@@ -565,35 +553,37 @@ stem(0:L-1, y_lcc, 'filled', 'LineWidth', 1.5);
 title(sprintf('3. Linear via Circular (L=%d)', L));
 xlabel('n'); ylabel('y[n]'); grid on;
 
-sgtitle('Linear and Circular Convolution', 'FontWeight', 'bold', 'FontSize', 12);</pre>
+sgtitle('Convolution Results','FontWeight','bold','FontSize',12);</pre>
     </div>
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════════════════════════════
-     EXPERIMENT 4
-════════════════════════════════════════════════════════════════ -->
-<div class="exp-card" id="exp4">
-  <div class="exp-header">
-    <span class="exp-number">Exp 4</span>
-    <span class="exp-title">DFT and IDFT of a Sequence</span>
+<!-- ╔══════════════════════════════════════════════════════╗
+     ║  EXPERIMENT 4                                        ║
+     ╚══════════════════════════════════════════════════════╝ -->
+<div class="card" id="e4">
+  <div class="card-header">
+    <span class="exp-num">Exp 4</span>
+    <span>DFT and IDFT of a Sequence</span>
   </div>
-  <div class="exp-body">
-    <div class="aim-box">
-      <div class="aim-label">Aim (Question)</div>
-      <p>How do you compute the Discrete Fourier Transform (DFT) and Inverse DFT (IDFT) of a given discrete
-         sequence manually using the DFT formula in MATLAB, and verify the result using the built-in
-         <code>fft()</code> function?</p>
+  <div class="card-body">
+    <div class="aim">
+      <div class="aim-label">&#127919; Aim &ndash; Question</div>
+      <p>How do you compute the <b>Discrete Fourier Transform (DFT)</b> and <b>Inverse DFT (IDFT)</b>
+         of a given discrete sequence manually using the DFT formula in MATLAB, and verify
+         the result using the built-in <code>fft()</code> function?<br><br>
+         DFT &nbsp;: X(k) = &sum; x(n) &middot; e<sup>&minus;j2&pi;kn/N</sup><br>
+         IDFT : x(n) = (1/N) &sum; X(k) &middot; e<sup>j2&pi;kn/N</sup></p>
     </div>
-    <div class="code-wrapper">
-      <div class="code-toolbar">
-        <span class="code-lang">MATLAB – exp4_dft_idft.m</span>
+    <div class="code-wrap">
+      <div class="code-bar">
+        <span class="code-lang">MATLAB &mdash; exp4_dft_idft.m</span>
         <button class="copy-btn" onclick="copyCode(this)">Copy</button>
       </div>
-<pre id="code4">% EXPERIMENT 4 - DFT and IDFT of a Sequence
+<pre>% EXPERIMENT 4 - DFT and IDFT of a Sequence
 %
-% DFT  : X(k) = sum_{n=0}^{N-1} x(n) * W_N^{nk}    where W_N = e^{-j2pi/N}
-% IDFT : x(n) = (1/N) * sum_{k=0}^{N-1} X(k) * e^{j2pi*nk/N}
+% DFT  : X(k) = sum_{n=0}^{N-1} x(n)*exp(-j*2*pi*k*n/N)
+% IDFT : x(n) = (1/N) sum_{k=0}^{N-1} X(k)*exp(j*2*pi*k*n/N)
 
 clc;
 clear;
@@ -603,7 +593,8 @@ close all;
 x = [1, 2, 3, 4];
 N = length(x);
 
-fprintf('Input sequence x[n]: ');  disp(x);
+fprintf('Input sequence x[n]: ');
+disp(x);
 
 % =========================================================
 %  MANUAL DFT
@@ -611,12 +602,14 @@ fprintf('Input sequence x[n]: ');  disp(x);
 X = zeros(1, N);
 for k = 0:N-1
     for n = 0:N-1
-        X(k+1) = X(k+1) + x(n+1) * exp(-1j * 2 * pi * k * n / N);
+        X(k+1) = X(k+1) + x(n+1)*exp(-1j*2*pi*k*n/N);
     end
 end
 
-fprintf('\nDFT Magnitude |X(k)|:\n');      disp(abs(X));
-fprintf('DFT Phase (degrees):\n');         disp(angle(X)*180/pi);
+fprintf('\nDFT Magnitude |X(k)|:\n');
+disp(abs(X));
+fprintf('DFT Phase (degrees):\n');
+disp(angle(X)*180/pi);
 
 % =========================================================
 %  MANUAL IDFT
@@ -624,18 +617,20 @@ fprintf('DFT Phase (degrees):\n');         disp(angle(X)*180/pi);
 x_rec = zeros(1, N);
 for n = 0:N-1
     for k = 0:N-1
-        x_rec(n+1) = x_rec(n+1) + X(k+1) * exp(1j * 2 * pi * k * n / N);
+        x_rec(n+1) = x_rec(n+1) + X(k+1)*exp(1j*2*pi*k*n/N);
     end
-    x_rec(n+1) = x_rec(n+1) / N;
+    x_rec(n+1) = x_rec(n+1)/N;
 end
 x_rec = real(x_rec);
 
-fprintf('\nIDFT reconstructed x[n]:\n');  disp(x_rec);
+fprintf('\nIDFT reconstructed x[n]:\n');
+disp(x_rec);
 fprintf('Max reconstruction error: %.2e\n', max(abs(x - x_rec)));
 
 % Verify with built-in fft
 X_builtin = fft(x);
-fprintf('Manual DFT matches fft(): %d\n', max(abs(X - X_builtin)) &lt; 1e-9);
+fprintf('Manual DFT matches fft(): %d\n',...
+        max(abs(X - X_builtin)) &lt; 1e-9);
 
 % =========================================================
 %  PLOTS
@@ -651,12 +646,12 @@ xlabel('n'); ylabel('x[n]'); grid on;
 
 subplot(2,2,2);
 stem(k_ax, abs(X), 'filled', 'LineWidth', 1.5);
-title('DFT Magnitude  |X(k)|');
+title('DFT Magnitude |X(k)|');
 xlabel('k'); ylabel('|X(k)|'); grid on;
 
 subplot(2,2,3);
 stem(k_ax, angle(X)*180/pi, 'filled', 'LineWidth', 1.5);
-title('DFT Phase  \angleX(k)');
+title('DFT Phase  angle X(k)');
 xlabel('k'); ylabel('Phase (degrees)'); grid on;
 
 subplot(2,2,4);
@@ -664,35 +659,37 @@ stem(k_ax, x_rec, 'filled', 'LineWidth', 1.5);
 title('Reconstructed x[n] via IDFT');
 xlabel('n'); ylabel('x[n]'); grid on;
 
-sgtitle('DFT and IDFT of a Sequence', 'FontWeight', 'bold', 'FontSize', 12);</pre>
+sgtitle('DFT and IDFT of a Sequence','FontWeight','bold','FontSize',12);</pre>
     </div>
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════════════════════════════
-     EXPERIMENT 5
-════════════════════════════════════════════════════════════════ -->
-<div class="exp-card" id="exp5">
-  <div class="exp-header">
-    <span class="exp-number">Exp 5</span>
-    <span class="exp-title">Linear Convolution using DFT</span>
+<!-- ╔══════════════════════════════════════════════════════╗
+     ║  EXPERIMENT 5                                        ║
+     ╚══════════════════════════════════════════════════════╝ -->
+<div class="card" id="e5">
+  <div class="card-header">
+    <span class="exp-num">Exp 5</span>
+    <span>Linear Convolution using DFT</span>
   </div>
-  <div class="exp-body">
-    <div class="aim-box">
-      <div class="aim-label">Aim (Question)</div>
-      <p>How do you compute the linear convolution of two given sequences using the DFT approach
-         (FFT and IFFT) in MATLAB, and verify the result using the built-in <code>conv()</code> function?</p>
+  <div class="card-body">
+    <div class="aim">
+      <div class="aim-label">&#127919; Aim &ndash; Question</div>
+      <p>How do you compute the <b>linear convolution</b> of two given sequences using the
+         <b>DFT approach (FFT and IFFT)</b> in MATLAB, and verify the result using the
+         built-in <code>conv()</code> function?<br><br>
+         Principle: Y(k) = FFT{x[n]} &times; FFT{h[n]} &nbsp;&rarr;&nbsp; y[n] = IFFT{Y(k)}</p>
     </div>
-    <div class="code-wrapper">
-      <div class="code-toolbar">
-        <span class="code-lang">MATLAB – exp5_linear_conv_dft.m</span>
+    <div class="code-wrap">
+      <div class="code-bar">
+        <span class="code-lang">MATLAB &mdash; exp5_linear_conv_dft.m</span>
         <button class="copy-btn" onclick="copyCode(this)">Copy</button>
       </div>
-<pre id="code5">% EXPERIMENT 5 - Linear Convolution using DFT (FFT/IFFT)
+<pre>% EXPERIMENT 5 - Linear Convolution using DFT (FFT/IFFT)
 %
-% Method:  Y(k) = FFT{x[n]} * FFT{h[n]}
+% Method : Y(k) = FFT{x[n]} * FFT{h[n]}
 %          y[n] = IFFT{Y(k)}
-% Verified against MATLAB built-in conv()
+% Verified against conv()
 
 clc;
 clear;
@@ -710,9 +707,9 @@ fprintf('Input h[n]: ');  disp(h);
 % =========================================================
 L = length(x) + length(h) - 1;    % required output length
 
-X = fft(x, L);    % zero-pad both to length L before FFT
+X = fft(x, L);    % zero-pad to L and compute FFT
 H = fft(h, L);
-Y = X .* H;       % multiply in frequency domain = convolution in time
+Y = X .* H;       % multiply in frequency domain
 y_fft = real(ifft(Y));
 
 % =========================================================
@@ -720,58 +717,63 @@ y_fft = real(ifft(Y));
 % =========================================================
 y_conv = conv(x, h);
 
-fprintf('\nLinear Convolution using FFT/IFFT:\n');  disp(y_fft);
-fprintf('Verification using conv():\n');            disp(y_conv);
+fprintf('\nLinear Convolution using FFT/IFFT:\n');
+disp(y_fft);
+fprintf('Verification using conv():\n');
+disp(y_conv);
 fprintf('Results match: %d\n', max(abs(y_fft - y_conv)) &lt; 1e-9);
 
 % =========================================================
 %  PLOTS
 % =========================================================
-figure('Name','Experiment 5 - Linear Convolution using DFT','NumberTitle','off');
+figure('Name','Experiment 5 - Linear Conv using DFT','NumberTitle','off');
 
 subplot(3,1,1);
 stem(0:length(x)-1, x, 'filled', 'LineWidth', 1.5);
-title('Input Sequence x[n]'); xlabel('n'); ylabel('x[n]'); grid on;
+title('Input Sequence x[n]');
+xlabel('n'); ylabel('x[n]'); grid on;
 
 subplot(3,1,2);
 stem(0:length(h)-1, h, 'filled', 'LineWidth', 1.5);
-title('Impulse Response h[n]'); xlabel('n'); ylabel('h[n]'); grid on;
+title('Impulse Response h[n]');
+xlabel('n'); ylabel('h[n]'); grid on;
 
 subplot(3,1,3);
 stem(0:L-1, y_fft, 'filled', 'LineWidth', 1.5);
 hold on;
 stem(0:L-1, y_conv, 'rx', 'LineWidth', 1.5);
 hold off;
-legend('FFT/IFFT method', 'conv() verification');
+legend('FFT/IFFT method','conv() verification');
 title('Linear Convolution  y[n] = x[n] * h[n]');
 xlabel('n'); ylabel('y[n]'); grid on;
 
-sgtitle('Linear Convolution using DFT (FFT/IFFT)', 'FontWeight', 'bold', 'FontSize', 12);</pre>
+sgtitle('Linear Convolution using DFT (FFT/IFFT)',...
+        'FontWeight','bold','FontSize',12);</pre>
     </div>
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════════════════════════════
-     EXPERIMENT 6
-════════════════════════════════════════════════════════════════ -->
-<div class="exp-card" id="exp6">
-  <div class="exp-header">
-    <span class="exp-number">Exp 6</span>
-    <span class="exp-title">FFT and IFFT for the Given Input Sequence</span>
+<!-- ╔══════════════════════════════════════════════════════╗
+     ║  EXPERIMENT 6                                        ║
+     ╚══════════════════════════════════════════════════════╝ -->
+<div class="card" id="e6">
+  <div class="card-header">
+    <span class="exp-num">Exp 6</span>
+    <span>FFT and IFFT for the Given Input Sequence</span>
   </div>
-  <div class="exp-body">
-    <div class="aim-box">
-      <div class="aim-label">Aim (Question)</div>
-      <p>How do you compute and plot the Fast Fourier Transform (FFT) and Inverse Fast Fourier Transform (IFFT)
-         of a given input sequence using MATLAB, and verify that the IFFT correctly reconstructs the
-         original signal?</p>
+  <div class="card-body">
+    <div class="aim">
+      <div class="aim-label">&#127919; Aim &ndash; Question</div>
+      <p>How do you compute and plot the <b>Fast Fourier Transform (FFT)</b> and
+         <b>Inverse Fast Fourier Transform (IFFT)</b> of a given input sequence using MATLAB,
+         and verify that the IFFT correctly reconstructs the original signal?</p>
     </div>
-    <div class="code-wrapper">
-      <div class="code-toolbar">
-        <span class="code-lang">MATLAB – exp6_fft_ifft.m</span>
+    <div class="code-wrap">
+      <div class="code-bar">
+        <span class="code-lang">MATLAB &mdash; exp6_fft_ifft.m</span>
         <button class="copy-btn" onclick="copyCode(this)">Copy</button>
       </div>
-<pre id="code6">% EXPERIMENT 6 - FFT and IFFT of a Given Input Sequence
+<pre>% EXPERIMENT 6 - FFT and IFFT of a Given Input Sequence
 
 clc;
 clear;
@@ -781,23 +783,28 @@ close all;
 x = [1, 2, 3, 4, 5, 6, 7, 8];
 N = length(x);
 
-fprintf('Input sequence x[n]: ');  disp(x);
+fprintf('Input sequence x[n]: ');
+disp(x);
 
 % =========================================================
 %  FFT
 % =========================================================
 X = fft(x);
 
-fprintf('\nFFT X(k):\n');            disp(X);
-fprintf('Magnitude |X(k)|:\n');      disp(abs(X));
-fprintf('Phase (degrees):\n');       disp(angle(X)*180/pi);
+fprintf('\nFFT X(k):\n');
+disp(X);
+fprintf('Magnitude |X(k)|:\n');
+disp(abs(X));
+fprintf('Phase (degrees):\n');
+disp(angle(X)*180/pi);
 
 % =========================================================
 %  IFFT
 % =========================================================
 x_rec = real(ifft(X));
 
-fprintf('\nIFFT reconstructed x[n]:\n');   disp(x_rec);
+fprintf('\nIFFT reconstructed x[n]:\n');
+disp(x_rec);
 fprintf('Max reconstruction error: %.2e\n', max(abs(x - x_rec)));
 
 % =========================================================
@@ -819,7 +826,7 @@ xlabel('k'); ylabel('|X(k)|'); grid on;
 
 subplot(2,2,3);
 stem(k_ax, angle(X)*180/pi, 'filled', 'LineWidth', 1.5);
-title('FFT Phase  \angleX(k)');
+title('FFT Phase  angle X(k)');
 xlabel('k'); ylabel('Phase (degrees)'); grid on;
 
 subplot(2,2,4);
@@ -827,41 +834,43 @@ stem(k_ax, x_rec, 'filled', 'LineWidth', 1.5);
 title('IFFT Reconstructed x[n]');
 xlabel('n'); ylabel('x[n]'); grid on;
 
-sgtitle('FFT and IFFT of Input Sequence', 'FontWeight', 'bold', 'FontSize', 12);</pre>
+sgtitle('FFT and IFFT of Input Sequence',...
+        'FontWeight','bold','FontSize',12);</pre>
     </div>
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════════════════════════════
-     EXPERIMENT 7
-════════════════════════════════════════════════════════════════ -->
-<div class="exp-card" id="exp7">
-  <div class="exp-header">
-    <span class="exp-number">Exp 7</span>
-    <span class="exp-title">FIR and IIR Filter Design</span>
+<!-- ╔══════════════════════════════════════════════════════╗
+     ║  EXPERIMENT 7                                        ║
+     ╚══════════════════════════════════════════════════════╝ -->
+<div class="card" id="e7">
+  <div class="card-header">
+    <span class="exp-num">Exp 7</span>
+    <span>FIR and IIR Filter Design</span>
   </div>
-  <div class="exp-body">
-    <div class="aim-box">
-      <div class="aim-label">Aim (Question)</div>
-      <p>How do you design the following digital filters in MATLAB and plot their magnitude and phase responses?
-         <br><b>Part i – IIR LPF</b> (Passband: 4 kHz, Stopband: 6 kHz, Rp ≤ 1 dB, Rs ≥ 40 dB, Fs = 24 kHz):
-         a) Butterworth &nbsp; b) Chebyshev Type-I
-         <br><b>Part ii – FIR BPF</b> (fp1=20 Hz, fp2=30 Hz, fs1=10 Hz, fs2=40 Hz, Rp=0.5 dB, Rs=30 dB, Fs=100 Hz):
-         a) Hamming Window &nbsp; b) Kaiser Window</p>
+  <div class="card-body">
+    <div class="aim">
+      <div class="aim-label">&#127919; Aim &ndash; Question</div>
+      <p>How do you design the following digital filters in MATLAB and plot their magnitude and phase responses?<br><br>
+         <b>Part i &ndash; IIR Low-Pass Filter</b>
+         (Passband edge: 4 kHz, Stopband edge: 6 kHz, Rp &le; 1 dB, Rs &ge; 40 dB, Fs = 24 kHz)<br>
+         &nbsp;&nbsp;a) Butterworth filter &nbsp;&nbsp; b) Chebyshev Type-I filter<br><br>
+         <b>Part ii &ndash; FIR Band-Pass Filter</b>
+         (fp1=20 Hz, fp2=30 Hz, fs1=10 Hz, fs2=40 Hz, Rp=0.5 dB, Rs=30 dB, Fs=100 Hz)<br>
+         &nbsp;&nbsp;a) Hamming Window &nbsp;&nbsp; b) Kaiser Window</p>
     </div>
-    <div class="code-wrapper">
-      <div class="code-toolbar">
-        <span class="code-lang">MATLAB – exp7_filter_design.m</span>
+    <div class="code-wrap">
+      <div class="code-bar">
+        <span class="code-lang">MATLAB &mdash; exp7_filter_design.m</span>
         <button class="copy-btn" onclick="copyCode(this)">Copy</button>
       </div>
-<pre id="code7">% EXPERIMENT 7 - FIR and IIR Filter Design
+<pre>% EXPERIMENT 7 - FIR and IIR Filter Design
 %
-% Part i  - IIR Low-Pass Filter
-%   Passband ripple: <=1dB  |  Passband edge: 4kHz
-%   Stopband atten: >=40dB  |  Stopband edge: 6kHz  |  Fs: 24kHz
+% Part i  : IIR LPF
+%   Passband edge=4kHz, Stopband edge=6kHz, Rp<=1dB, Rs>=40dB, Fs=24kHz
 %   a) Butterworth   b) Chebyshev Type-I
 %
-% Part ii - FIR Band-Pass Filter
+% Part ii : FIR BPF
 %   fp1=20Hz, fp2=30Hz, fs1=10Hz, fs2=40Hz, Rp=0.5dB, Rs=30dB, Fs=100Hz
 %   a) Hamming Window   b) Kaiser Window
 
@@ -878,9 +887,8 @@ Fst = 6000;    % stopband edge (Hz)
 Rp  = 1;       % passband ripple (dB)
 Rs  = 40;      % stopband attenuation (dB)
 
-% Normalize to [0,1] where 1 = Nyquist = Fs/2
-Wp = Fp  / (Fs/2);
-Ws = Fst / (Fs/2);
+Wp = Fp  / (Fs/2);    % normalized passband edge [0,1]
+Ws = Fst / (Fs/2);    % normalized stopband edge [0,1]
 
 % --- a) Butterworth LPF ---
 [n_but, Wn_but] = buttord(Wp, Ws, Rp, Rs);
@@ -892,10 +900,10 @@ figure('Name','IIR - Butterworth LPF','NumberTitle','off');
 
 subplot(2,1,1);
 plot(f, 20*log10(abs(H)+eps), 'LineWidth', 1.5);
-title(sprintf('Butterworth LPF (Order=%d)  Magnitude Response', n_but));
+title(sprintf('Butterworth LPF (Order = %d)  Magnitude Response', n_but));
 xlabel('Frequency (Hz)'); ylabel('Magnitude (dB)');
-xline(Fp,  '--r', 'Passband','LabelVerticalAlignment','bottom');
-xline(Fst, '--b', 'Stopband','LabelVerticalAlignment','bottom');
+xline(Fp,  '--r', 'Passband Edge','LabelVerticalAlignment','bottom');
+xline(Fst, '--b', 'Stopband Edge','LabelVerticalAlignment','bottom');
 grid on;
 
 subplot(2,1,2);
@@ -903,7 +911,7 @@ plot(f, angle(H)*180/pi, 'LineWidth', 1.5);
 title('Butterworth LPF  Phase Response');
 xlabel('Frequency (Hz)'); ylabel('Phase (degrees)'); grid on;
 
-sgtitle('IIR Filter - Butterworth LPF', 'FontWeight', 'bold');
+sgtitle('IIR Filter - Butterworth LPF','FontWeight','bold');
 
 % --- b) Chebyshev Type-I LPF ---
 [n_cheb, Wn_cheb] = cheb1ord(Wp, Ws, Rp, Rs);
@@ -915,10 +923,10 @@ figure('Name','IIR - Chebyshev LPF','NumberTitle','off');
 
 subplot(2,1,1);
 plot(f, 20*log10(abs(H)+eps), 'LineWidth', 1.5);
-title(sprintf('Chebyshev Type-I LPF (Order=%d)  Magnitude Response', n_cheb));
+title(sprintf('Chebyshev Type-I LPF (Order = %d)  Magnitude Response', n_cheb));
 xlabel('Frequency (Hz)'); ylabel('Magnitude (dB)');
-xline(Fp,  '--r', 'Passband','LabelVerticalAlignment','bottom');
-xline(Fst, '--b', 'Stopband','LabelVerticalAlignment','bottom');
+xline(Fp,  '--r', 'Passband Edge','LabelVerticalAlignment','bottom');
+xline(Fst, '--b', 'Stopband Edge','LabelVerticalAlignment','bottom');
 grid on;
 
 subplot(2,1,2);
@@ -926,21 +934,20 @@ plot(f, angle(H)*180/pi, 'LineWidth', 1.5);
 title('Chebyshev Type-I LPF  Phase Response');
 xlabel('Frequency (Hz)'); ylabel('Phase (degrees)'); grid on;
 
-sgtitle('IIR Filter - Chebyshev Type-I LPF', 'FontWeight', 'bold');
+sgtitle('IIR Filter - Chebyshev Type-I LPF','FontWeight','bold');
 
 % =========================================================
 %  PART ii : FIR BAND-PASS FILTER
 % =========================================================
-Fs2 = 100;   % sampling frequency (Hz)
-fp1 = 20;  fp2 = 30;    % passband edges
-fs1 = 10;  fs2 = 40;    % stopband edges
-Rp2 = 0.5;   Rs2 = 30;
+Fs2 = 100;
+fp1 = 20;  fp2 = 30;
+fs1 = 10;  fs2 = 40;
+Rp2 = 0.5; Rs2 = 30;
 
-df    = min(fp1 - fs1, fs2 - fp2);          % transition width = 10 Hz
-N_ord = ceil((Rs2 - 7.95) / (14.36*(df/Fs2)));  % FIR order estimate
-N_fir = N_ord + mod(N_ord+1, 2);            % ensure odd (Type I FIR)
-
-Wn_bp = [fp1, fp2] / (Fs2/2);              % normalized passband edges
+df    = min(fp1-fs1, fs2-fp2);                      % transition width
+N_ord = ceil((Rs2-7.95)/(14.36*(df/Fs2)));          % order estimate
+N_fir = N_ord + mod(N_ord+1, 2);                    % ensure odd
+Wn_bp = [fp1, fp2]/(Fs2/2);                         % normalized edges
 
 % --- a) Hamming Window BPF ---
 b_ham = fir1(N_fir-1, Wn_bp, 'bandpass', hamming(N_fir));
@@ -951,7 +958,7 @@ figure('Name','FIR BPF - Hamming','NumberTitle','off');
 
 subplot(2,1,1);
 plot(f, 20*log10(abs(H)+eps), 'LineWidth', 1.5);
-title(sprintf('FIR BPF - Hamming Window (Order=%d)  Magnitude Response', N_fir-1));
+title(sprintf('FIR BPF - Hamming Window (Order=%d)  Magnitude Response',N_fir-1));
 xlabel('Frequency (Hz)'); ylabel('Magnitude (dB)');
 xline(fs1,'--b'); xline(fp1,'--r'); xline(fp2,'--r'); xline(fs2,'--b');
 grid on;
@@ -961,10 +968,10 @@ plot(f, angle(H)*180/pi, 'LineWidth', 1.5);
 title('FIR BPF - Hamming Window  Phase Response');
 xlabel('Frequency (Hz)'); ylabel('Phase (degrees)'); grid on;
 
-sgtitle('FIR Filter - Hamming Window BPF', 'FontWeight', 'bold');
+sgtitle('FIR Filter - Hamming Window BPF','FontWeight','bold');
 
 % --- b) Kaiser Window BPF ---
-beta  = 0.1102 * (Rs2 - 8.7);
+beta  = 0.1102*(Rs2-8.7);
 b_kai = fir1(N_fir-1, Wn_bp, 'bandpass', kaiser(N_fir, beta));
 fprintf('FIR BPF Kaiser Window   Order = %d  beta = %.4f\n', N_fir-1, beta);
 
@@ -973,7 +980,7 @@ figure('Name','FIR BPF - Kaiser','NumberTitle','off');
 
 subplot(2,1,1);
 plot(f, 20*log10(abs(H)+eps), 'LineWidth', 1.5);
-title(sprintf('FIR BPF - Kaiser Window (Order=%d)  Magnitude Response', N_fir-1));
+title(sprintf('FIR BPF - Kaiser Window (Order=%d)  Magnitude Response',N_fir-1));
 xlabel('Frequency (Hz)'); ylabel('Magnitude (dB)');
 xline(fs1,'--b'); xline(fp1,'--r'); xline(fp2,'--r'); xline(fs2,'--b');
 grid on;
@@ -983,32 +990,45 @@ plot(f, angle(H)*180/pi, 'LineWidth', 1.5);
 title('FIR BPF - Kaiser Window  Phase Response');
 xlabel('Frequency (Hz)'); ylabel('Phase (degrees)'); grid on;
 
-sgtitle('FIR Filter - Kaiser Window BPF', 'FontWeight', 'bold');</pre>
+sgtitle('FIR Filter - Kaiser Window BPF','FontWeight','bold');</pre>
     </div>
   </div>
 </div>
 
 </div><!-- /container -->
 
-<footer>
-  ERL 332 Signal Processing Lab &nbsp;|&nbsp; St. Joseph's College of Engineering &amp; Technology
-</footer>
+<footer>ERL 332 Signal Processing Lab &nbsp;&mdash;&nbsp; St. Joseph&apos;s College of Engineering &amp; Technology</footer>
 
-<!-- ═══════════════════════════════════════════════════════════════
-     COPY BUTTON LOGIC
-════════════════════════════════════════════════════════════════ -->
 <script>
-  function copyCode(btn) {
-    const pre = btn.closest('.code-wrapper').querySelector('pre');
-    navigator.clipboard.writeText(pre.innerText).then(() => {
+function copyCode(btn) {
+  var pre = btn.closest('.code-wrap').querySelector('pre');
+  var text = pre.innerText;
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(function() {
       btn.textContent = 'Copied!';
-      btn.style.background = '#27ae60';
-      setTimeout(() => {
+      btn.style.background = '#1e8449';
+      setTimeout(function() {
         btn.textContent = 'Copy';
         btn.style.background = '';
       }, 2000);
     });
+  } else {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    btn.textContent = 'Copied!';
+    btn.style.background = '#1e8449';
+    setTimeout(function() {
+      btn.textContent = 'Copy';
+      btn.style.background = '';
+    }, 2000);
   }
+}
 </script>
 
 </body>
